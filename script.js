@@ -1,6 +1,5 @@
-let answer = "";
-
 document.addEventListener('DOMContentLoaded', function () {
+    let answer = "";
     let attemptsLeft = 5;
     let originalQuote = '';
     let revealedQuote = '';
@@ -58,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Function to check if the guess is correct
     function checkGuess(guess) {
-      console.log(guess, answer)
       // Compare the guess with the original quote
       if (guess.trim() === answer) {
         // Correct guess
@@ -66,14 +64,15 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(fetchQuote, 3000); // Reset the game after 3 seconds
       } else {
         // Incorrect guess
-        attemptsLeft--;
+        //attemptsLeft--;
+        attemptsLeft = Math.max(attemptsLeft - 1, 0);
+        updateAttemptsDisplay();
         if (attemptsLeft === 0) {
           // Out of attempts
           displayMessage(`Sorry, you're out of attempts. The correct quote was: "${originalQuote}"`);
           setTimeout(fetchQuote, 3000); // Reset the game after 3 seconds
         } else {
           // Display remaining attempts
-          updateAttemptsDisplay();
           displayMessage('Incorrect guess. Try again!');
         }
       }

@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let attemptsLeft = 5;
     let originalQuote = '';
     let revealedQuote = '';
+    let flagged = [];
   
     // Function to fetch a random quote from the Quotable API
     function fetchQuote() {
@@ -65,15 +66,27 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         // Incorrect guess
         //attemptsLeft--;
+        if(flagged.includes(guess.trim()))
+        {
+        displayMessage('Sorry you have already tried this!!!!!');
+        }
+        else
+        {
+        flagged.push(guess.trim());
         attemptsLeft = Math.max(attemptsLeft - 1, 0);
         updateAttemptsDisplay();
-        if (attemptsLeft === 0) {
-          // Out of attempts
-          displayMessage(`Sorry, you're out of attempts. The correct quote was: "${originalQuote}"`);
-          setTimeout(fetchQuote, 3000); // Reset the game after 3 seconds
-        } else {
-          // Display remaining attempts
-          displayMessage('Incorrect guess. Try again!');
+
+        
+            if (attemptsLeft === 0) {
+            // Out of attempts
+            displayMessage(`Sorry, you're out of attempts. The correct quote was: "${originalQuote}"`);
+            setTimeout(fetchQuote, 3000); // Reset the game after 3 seconds
+            }     
+            else 
+            {
+            // Display remaining attempts
+            displayMessage('Incorrect guess. Try again!');
+            }
         }
       }
     }

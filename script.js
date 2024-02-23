@@ -4,6 +4,34 @@ document.addEventListener('DOMContentLoaded', function () {
     let originalQuote = '';
     let revealedQuote = '';
     let flagged = [];
+    let hintUsed = false;
+
+    // Function to fetch a synonym from an API
+    function fetchSynonym(word) {
+        // Replace with your preferred synonym API endpoint
+        fetch('https://api.datamuse.com/words?ml=' + word)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+            // Display a random synonym as a hint
+            displayMessage('Hint: One synonym for the missing word is: ' + data[0].word);
+            } else {
+            displayMessage('Sorry, no synonyms found.');
+            }
+        })
+        .catch(error => console.error('Error fetching synonym:', error));
+    }
+
+    // Event listener for the hint button
+    document.getElementById('hint-button').addEventListener('click', function () {
+        if (!hintUsed) {
+        fetchSynonym(answer);
+        hintUsed = true; // Mark hint as used
+        } else {
+        displayMessage('You have already used the hint.');
+        }
+    });
+
   
     // Function to fetch a random quote from the Quotable API
     function fetchQuote() {
@@ -59,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to check if the guess is correct
     function checkGuess(guess) {
       // Compare the guess with the original quote
-      if (guess.trim() === answer) {
+      if (guess.trim().toLowerCase() === answer.toLowerCase()) {
         // Correct guess
-        displayMessage('OMG! You got it right!');
+        displayMessage('OMG! You got it right!', true);
         setTimeout(fetchQuote, 3000); // Reset the game after 3 seconds
       } else {
         // Incorrect guess
@@ -92,8 +120,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   
     // Function to display message
-    function displayMessage(message) {
-      document.getElementById('message').textContent = message;
+    function displayMessage(message, success = false) {
+      let msgHolder = document.getElementById('message');
+      msgHolder.textContent = message;
+
+      if (success) {
+        msgHolder.style.color = "#00cc00";
+      } else {
+        msgHolder.style.color = "#FF0000";
+      }
     }
   
     // Fetch a quote when the page loads

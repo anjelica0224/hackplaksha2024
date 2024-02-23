@@ -1,0 +1,25 @@
+name: "Publish site"
+
+on:
+  - workflow_dispatch
+
+jobs:
+  - name: "Deploy site"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Setup node"
+        uses: actions/setup-node@v4
+        node-version: '20.11.1'
+
+      - name: "Install deps"
+        run: npm install
+
+      - name: "Build CSS"
+        run: |
+          npx tailwindcss -i styles.css -o assets/css/output.css
+      
+      - name: "Push to gh-pages branch"
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .

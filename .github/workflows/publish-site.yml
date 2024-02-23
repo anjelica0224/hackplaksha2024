@@ -10,7 +10,8 @@ jobs:
     steps:
       - name: "Setup node"
         uses: actions/setup-node@v4
-        node-version: '20.11.1'
+        with:
+          node-version: '20.11.1'
 
       - name: "Install deps"
         run: npm install

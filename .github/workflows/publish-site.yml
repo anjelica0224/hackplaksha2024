@@ -4,7 +4,8 @@ on:
   - workflow_dispatch
 
 jobs:
-  - name: "Deploy site"
+  deploy-site:
+    name: "Deploy site"
     runs-on: ubuntu-latest
     steps:
       - name: "Setup node"

@@ -49,15 +49,29 @@ document.addEventListener('DOMContentLoaded', function () {
   
           // Split the original quote into words
           const words = originalQuote.split(' ');
+          const max = words[0];
+          for(let i = 0; i < words.length; i++)
+          {
+                if(words[i] > max)
+                {
+                     max = words[i];   
+                }
+          }
+
+          for(let j = 0; j < words.length; j++)
+          if(words[i].length > 0.8 * max.length)
+          {
+                const candidates = [];
+                candidates.push(words[i]);
+                const wordToBlankIndex = Math.floor(Math.random() * candidateWords.length);
+                answer = candidateWords[wordToBlankIndex];
+                const blankedWord = answer;
+                // Blank out the selected word in the revealed quote
+                const blankedIndex = words.indexOf(answer);
+                words[blankedIndex] = '_'.repeat(blankedWord.length);
   
-          // Randomly select one word to blank out
-          const wordToBlankIndex = Math.floor(Math.random() * words.length);
-          answer = words[wordToBlankIndex];
-          const blankedWord = answer;
-  
-          // Blank out the selected word in the revealed quote
-          words[wordToBlankIndex] = '_'.repeat(blankedWord.length);
-  
+          }
+        
           // Join the words back together to form the revealed quote
           revealedQuote = words.join(' ');
   

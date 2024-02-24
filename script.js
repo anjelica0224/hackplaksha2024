@@ -5,35 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let revealedQuote = '';
     let flagged = [];
     let hintUsed = false;
-
     
-    function filterIrrelevantWords(words) {
-        // Calculate the average word length
-        let totalLength = 0;
-        for (const word of words) {
-            totalLength += word.length;
-        }
-        const averageLength = totalLength / words.length;
-        console.log('Average word length:', averageLength);
-    
-        // Define a threshold based on your preference (e.g., 80%)
-        const threshold = averageLength * 0.8;
-        console.log('Threshold:', threshold);
-    
-        const filteredWords = [];
-        for (const word of words) {
-            console.log('Current word:', word);
-            if (word.length >= threshold) {
-                filteredWords.push(word);
-            } else {
-                console.log('Filtered out:', word);
-            }
-        }
-        console.log('Filtered words:', filteredWords);
-        return filteredWords;
-    }
-    
-
     // Function to fetch a synonym from an API
     function fetchSynonym(word) {
         // Replace with your preferred synonym API endpoint
@@ -64,43 +36,60 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to fetch a random quote from the Quotable API
     function fetchQuote() {
         flagged = [];
+        displayQuote('Loading...');
+        document.getElementById('guess').value = "";
+        hintUsed = false;
       fetch('https://api.quotable.io/random')
         .then(response => response.json())
         .then(data => {
           originalQuote = data.content.trim(); // Remove leading and trailing whitespaces
-  
+            console.log(originalQuote)
+
           // Check if the quote is empty or contains only whitespace characters
           if (!originalQuote || /^\s*$/.test(originalQuote)) {
             // If so, fetch another quote
             fetchQuote();
             return;
           }
-  
-          // Split the original quote into words
-          const words = originalQuote.split(' ');
 
-          const filteredWords = filterIrrelevantWords(words);
-  
-          // Randomly select one word to blank out
-          const wordToBlankIndex = Math.floor(Math.random() * filteredWords.length);
-          answer = filteredWords[wordToBlankIndex];
-          const blankedWord = answer;
-  
-          // Blank out the selected word in the revealed quote
-          words[wordToBlankIndex] = '_'.repeat(blankedWord.length);
-  
-          // Join the words back together to form the revealed quote
-          revealedQuote = words.join(' ');
-  
-          // Display the initial revealed quote
-          displayQuote(revealedQuote);
-  
-          // Reset attempts left
-          attemptsLeft = 5;
-          updateAttemptsDisplay();
-  
-          // Clear previous messages
-          displayMessage('');
+          fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyARlNq8KgvtpDz"+"APw12aVFb5Tdia1PbMFM", {
+            method: "POST",
+            body: JSON.stringify({
+                contents: [
+                  {
+                    parts: [
+                      {
+                        text: "You are conducting a quiz. You have a quote and you will suggest a prominent meaningful word in the quote that can be replaced with blank underscores " +
+                            "so that the player can play a guessing game for the word. YOur output will include only the word that you suggest to be removed." +
+                            `There should be no formatting in your output. Here is the quote: ${originalQuote}`,
+                      },
+                    ],
+                  },
+                ],
+              }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+                answer = data.candidates[0].content.parts[0].text;
+                let blanks = "_".repeat(answer.length);
+                revealedQuote = originalQuote.replace(new RegExp(`\\b${answer}\\b`, "gi"), blanks);
+
+                // Display the initial revealed quote
+                displayQuote(revealedQuote);
+
+                // Reset attempts left
+                attemptsLeft = 5;
+                updateAttemptsDisplay();
+
+                // Clear previous messages
+                displayMessage('');
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
         })
         .catch(error => console.error('Error fetching quote:', error));
     }

@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
           // Split the original quote into words
           const words = originalQuote.split(' ');
-          const max = words[0];
+          let max = words[0];
           for(let i = 0; i < words.length; i++)
           {
                 if(words[i] > max)

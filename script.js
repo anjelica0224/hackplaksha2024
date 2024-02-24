@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
           originalQuote = data.content.trim(); // Remove leading and trailing whitespaces
-            console.log(originalQuote)
 
           // Check if the quote is empty or contains only whitespace characters
           if (!originalQuote || /^\s*$/.test(originalQuote)) {

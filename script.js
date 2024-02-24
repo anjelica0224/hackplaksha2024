@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Function to fetch a random quote from the Quotable API
     function fetchQuote() {
+        flagged = [];
       fetch('https://api.quotable.io/random')
         .then(response => response.json())
         .then(data => {

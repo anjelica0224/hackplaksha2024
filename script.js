@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
       fetch('https://api.quotable.io/random')
         .then(response => response.json())
         .then(data => {
+          console.log(data.content)
           originalQuote = data.content.trim(); // Remove leading and trailing whitespaces
   
           // Check if the quote is empty or contains only whitespace characters

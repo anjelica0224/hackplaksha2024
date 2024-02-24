@@ -1,4 +1,29 @@
+const HIGHSCORE = "highscore";
+const INITIALLOAD = "init";
+
+const isInitialLoad = () => {
+    const isInitial = localStorage.getItem(INITIALLOAD) ?? true
+
+    if (isInitial) {
+        localStorage.setItem(INITIALLOAD, false);
+    }
+
+    return isInitial;
+}
+
+const getHighScore = () => {
+    return localStorage.getItem(HIGHSCORE);
+};
+
+const saveHighScore = (score) => {
+    localStorage.setItem(HIGHSCORE, score);
+};
+
 document.addEventListener('DOMContentLoaded', function () {
+    if(isInitialLoad() === true) {
+        console.log("INITIAL LOAD...")
+    }
+
     let answer = "";
     let attemptsLeft = 5;
     let originalQuote = '';

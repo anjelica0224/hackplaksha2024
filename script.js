@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function fetchQuote() {
       fetch('https://api.quotable.io/random')
         .then(response => response.json())
+          console.log(response.json())
         .then(data => {
           originalQuote = data.content.trim(); // Remove leading and trailing whitespaces
   

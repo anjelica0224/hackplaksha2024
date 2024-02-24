@@ -6,6 +6,34 @@ document.addEventListener('DOMContentLoaded', function () {
     let flagged = [];
     let hintUsed = false;
 
+    
+    function filterIrrelevantWords(words) {
+        // Calculate the average word length
+        let totalLength = 0;
+        for (const word of words) {
+            totalLength += word.length;
+        }
+        const averageLength = totalLength / words.length;
+        console.log('Average word length:', averageLength);
+    
+        // Define a threshold based on your preference (e.g., 80%)
+        const threshold = averageLength * 0.8;
+        console.log('Threshold:', threshold);
+    
+        const filteredWords = [];
+        for (const word of words) {
+            console.log('Current word:', word);
+            if (word.length >= threshold) {
+                filteredWords.push(word);
+            } else {
+                console.log('Filtered out:', word);
+            }
+        }
+        console.log('Filtered words:', filteredWords);
+        return filteredWords;
+    }
+    
+
     // Function to fetch a synonym from an API
     function fetchSynonym(word) {
         // Replace with your preferred synonym API endpoint
@@ -31,14 +59,13 @@ document.addEventListener('DOMContentLoaded', function () {
         displayMessage('You have already used the hint.');
         }
     });
-
+    
   
     // Function to fetch a random quote from the Quotable API
     function fetchQuote() {
       fetch('https://api.quotable.io/random')
         .then(response => response.json())
         .then(data => {
-          console.log(data.content)
           originalQuote = data.content.trim(); // Remove leading and trailing whitespaces
   
           // Check if the quote is empty or contains only whitespace characters
@@ -50,10 +77,12 @@ document.addEventListener('DOMContentLoaded', function () {
   
           // Split the original quote into words
           const words = originalQuote.split(' ');
+
+          const filteredWords = filterIrrelevantWords(words);
   
           // Randomly select one word to blank out
-          const wordToBlankIndex = Math.floor(Math.random() * words.length);
-          answer = words[wordToBlankIndex];
+          const wordToBlankIndex = Math.floor(Math.random() * filteredWords.length);
+          answer = filteredWords[wordToBlankIndex];
           const blankedWord = answer;
   
           // Blank out the selected word in the revealed quote
@@ -97,28 +126,25 @@ document.addEventListener('DOMContentLoaded', function () {
         //attemptsLeft--;
         if(flagged.includes(guess.trim()))
         {
-        displayMessage('Sorry you have already tried this!!!!!');
+            displayMessage('Sorry you have already tried this!!!!!');
         }
-        else
-        {
-        flagged.push(guess.trim());
-        attemptsLeft = Math.max(attemptsLeft - 1, 0);
-        updateAttemptsDisplay();
-
-        
+        else{
+            flagged.push(guess.trim());
+            attemptsLeft = Math.max(attemptsLeft - 1, 0);
+            updateAttemptsDisplay();
             if (attemptsLeft === 0) {
-            // Out of attempts
-            displayMessage(`Sorry, you're out of attempts. The correct quote was: "${originalQuote}"`);
-            setTimeout(fetchQuote, 3000); // Reset the game after 3 seconds
+                // Out of attempts
+                displayMessage(`Sorry, you're out of attempts. The correct quote was: "${originalQuote}"`);
+                setTimeout(fetchQuote, 3000); // Reset the game after 3 seconds
             }     
-            else 
-            {
-            // Display remaining attempts
-            displayMessage('Incorrect guess. Try again!');
+            else {
+                // Display remaining attempts
+                displayMessage('Incorrect guess. Try again!');
             }
         }
       }
     }
+
   
     // Function to display message
     function displayMessage(message, success = false) {

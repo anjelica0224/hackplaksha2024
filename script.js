@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Function to fetch a random quote from the Quotable API
     function fetchQuote() {
-
         if(isInitialLoad() === true) return;
         confetti.clear();
         flagged = [];

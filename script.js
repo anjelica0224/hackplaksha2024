@@ -3,11 +3,6 @@ const INITIALLOAD = "init";
 
 const isInitialLoad = () => {
     const isInitial = localStorage.getItem(INITIALLOAD) ?? true
-
-    if (isInitial) {
-        localStorage.setItem(INITIALLOAD, false);
-    }
-
     return isInitial;
 }
 
@@ -20,9 +15,21 @@ const saveHighScore = (score) => {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
+  let modal = document.getElementById('default-modal')
+  document.getElementById('close-modal').addEventListener('click', () => {
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+    localStorage.setItem(INITIALLOAD, false);
+  })
+
     if(isInitialLoad() === true) {
-        console.log("INITIAL LOAD...")
+      modal.classList.add('flex');
+      modal.classList.remove('hidden');
+    } else {
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
     }
+    return
 
     let answer = "";
     let attemptsLeft = 5;
@@ -182,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
   
-    // Fetch a quote when the page loads
+    //Fetch a quote when the page loads
     fetchQuote();
   
     // Event listener for the guess form submission

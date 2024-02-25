@@ -3,9 +3,22 @@
 @tailwind components;
 @tailwind utilities;
 
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.canvas {
+  position: fixed;
+  z-index: -1;
+}
+
 /* Styles for specific elements */
 .container {
-  max-width: 600px; /* Adjust as needed */
+  z-index: 1;
+  max-width: 600px;  
 }
 
 .quote-container {
@@ -23,10 +36,6 @@
 
 #message {
   color: #f00; /* Change color for messages */
-}
-
-#score-display {
-  font-weight: bold;
 }
 
 #hint-button {

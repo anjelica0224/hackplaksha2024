@@ -7,7 +7,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
@@ -37,10 +36,6 @@
 
 #message {
   color: #f00; /* Change color for messages */
-}
-
-#score-display {
-  font-weight: bold;
 }
 
 #hint-button {

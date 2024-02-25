@@ -9,7 +9,7 @@
 <body>
   <div class="wrapper">
     <canvas class="canvas" id="canvas"></canvas>
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mt-4 mx-auto px-4 py-8">
       <div class="mb-4 flex items-center justify-between">
         <h1 class="text-3xl font-bold">Complete the Quote!</h1>
         <div class="text-xs flex flex-col">
@@ -25,9 +25,23 @@
         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 text-center">Guess</button>
         <p id="attempts">Attempts left: <span id="attempt-count">5</span></p>
       </form>
-      <div id="message" class="mt-4 text-sm"></div>
-      <div id="score-display" class="mt-4"></div>
+      <div id="message" class="mt-2 text-sm"></div>
       <button id="hint-button" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Get Hint</button>
+
+      <div class="mt-12 space-y-2">
+        <h2 class="text-2xl"><b>Rules</b></h2>
+        <ul class="list-disc text-base leading-relaxed text-gray-500">
+          <li><b>5 attempts</b>: You have 5 chances to guess the missing word in each quote.</li>
+          <li>
+            <b>Points and penalties</b>
+            <ul class="list-disc ml-6">
+              <li>Each correct guess earns you 40 points within 15 seconds, decreasing by 8 points with each subsequent attempt for that quote.</li>
+              <li>Using the hint costs you 10 points.</li>
+              <li>Exceeding the 100-second time limit deducts 50 points.</li>
+            </ul>
+          </li>
+        </ul>
+    </div>
     </div>
   </div>
   <div id="default-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">

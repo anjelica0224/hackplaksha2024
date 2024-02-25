@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 timeInterval = setInterval(() => {
                   timeSpan.textContent = `Time: ${((Date.now() - startTime) / 1000).toFixed(2)}s`
                 }, 0);
-                console.log(answer, originalQuote)
+
                 answer = data.candidates[0].content.parts[0].text;
                 let blanks = "_".repeat(answer.length);
                 revealedQuote = originalQuote.replace(new RegExp(`\\b${answer}\\b`, "gi"), blanks);
@@ -187,8 +187,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         scoreSpan.textContent = `Score: ${score} | High: ${getHighScore()} `
-
-        console.log(score)
 
         displayMessage('OMG! You got it right!', true);
 

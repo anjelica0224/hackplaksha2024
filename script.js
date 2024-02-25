@@ -30,7 +30,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let revealedQuote = '';
     let flagged = [];
     let hintUsed = false;
-    
+    let confettiElement = document.getElementById('canvas');
+    let confetti = new ConfettiGenerator({ target: confettiElement });;
+
     // Function to fetch a synonym from an API
     function fetchSynonym(word) {
         // Replace with your preferred synonym API endpoint
@@ -60,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Function to fetch a random quote from the Quotable API
     function fetchQuote() {
+        confetti.clear();
         flagged = [];
         displayQuote('Loading...');
         document.getElementById('guess').value = "";
@@ -97,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
           })
             .then((response) => response.json())
             .then((data) => {
+                console.log(answer, originalQuote)
                 answer = data.candidates[0].content.parts[0].text;
                 let blanks = "_".repeat(answer.length);
                 revealedQuote = originalQuote.replace(new RegExp(`\\b${answer}\\b`, "gi"), blanks);
@@ -134,6 +138,11 @@ document.addEventListener('DOMContentLoaded', function () {
       if (guess.trim().toLowerCase() === answer.toLowerCase()) {
         // Correct guess
         displayMessage('OMG! You got it right!', true);
+
+        var confettiSettings = { target: confettiElement, start_from_edge: true, clock: 50 };
+        confetti = new ConfettiGenerator(confettiSettings);
+        confetti.render();
+
         setTimeout(fetchQuote, 3000); // Reset the game after 3 seconds
       } else {
         // Incorrect guess

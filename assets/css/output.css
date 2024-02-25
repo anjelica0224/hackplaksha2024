@@ -730,10 +730,6 @@ video {
   margin-top: 1.5rem;
 }
 
-.mt-8 {
-  margin-top: 2rem;
-}
-
 .box-border {
   box-sizing: border-box;
 }
@@ -2449,11 +2445,24 @@ video {
   forced-color-adjust: none;
 }
 
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.canvas {
+  position: fixed;
+  z-index: -1;
+}
+
 /* Styles for specific elements */
 
 .container {
+  z-index: 1;
   max-width: 600px;
-  /* Adjust as needed */
 }
 
 .quote-container {

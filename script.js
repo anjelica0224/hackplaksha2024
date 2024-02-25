@@ -7,7 +7,7 @@ const isInitialLoad = () => {
 }
 
 const getHighScore = () => {
-    return localStorage.getItem(HIGHSCORE);
+    return localStorage.getItem(HIGHSCORE) ?? 0;
 };
 
 const saveHighScore = (score) => {
@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     modal.classList.remove('flex');
     modal.classList.add('hidden');
     localStorage.setItem(INITIALLOAD, false);
+    fetchQuote();
   })
 
     if(isInitialLoad() === true) {
@@ -30,14 +31,22 @@ document.addEventListener('DOMContentLoaded', function () {
       modal.classList.add('hidden');
     }
 
+    let score = 0;
     let answer = "";
     let attemptsLeft = 5;
     let originalQuote = '';
     let revealedQuote = '';
     let flagged = [];
     let hintUsed = false;
+    let timeInterval;
+    var startTime, endTime, timeTaken;
     let confettiElement = document.getElementById('canvas');
     let confetti = new ConfettiGenerator({ target: confettiElement });;
+
+    let scoreSpan = document.getElementById('score')
+    let timeSpan = document.getElementById('time')
+    timeSpan.style.display = 'none';
+    scoreSpan.textContent = `Score: ${score} | Highest: ${getHighScore()} `
 
     // Function to fetch a synonym from an API
     function fetchSynonym(word) {
@@ -47,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             if (data.length > 0) {
             // Display a random synonym as a hint
+            hintUsed = true; // Mark hint as used
             displayMessage('Hint: One synonym for the missing word is: ' + data[0].word);
             } else {
             displayMessage('Sorry, no synonyms found.');
@@ -59,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('hint-button').addEventListener('click', function () {
         if (!hintUsed) {
         fetchSynonym(answer);
-        hintUsed = true; // Mark hint as used
         } else {
         displayMessage('You have already used the hint.');
         }
@@ -68,12 +77,14 @@ document.addEventListener('DOMContentLoaded', function () {
   
     // Function to fetch a random quote from the Quotable API
     function fetchQuote() {
+        if(isInitialLoad() === true) return;
         confetti.clear();
         flagged = [];
         displayQuote('Loading...');
         displayMessage('');
         document.getElementById('guess').value = "";
         hintUsed = false;
+        timeSpan.style.display = 'none';
       fetch('https://api.quotable.io/random')
         .then(response => response.json())
         .then(data => {
@@ -107,6 +118,11 @@ document.addEventListener('DOMContentLoaded', function () {
           })
             .then((response) => response.json())
             .then((data) => {
+                timeSpan.style.display = 'block';
+                startTime = Date.now()
+                timeInterval = setInterval(() => {
+                  timeSpan.textContent = `Time: ${((Date.now() - startTime) / 1000).toFixed(2)}s`
+                }, 0);
                 console.log(answer, originalQuote)
                 answer = data.candidates[0].content.parts[0].text;
                 let blanks = "_".repeat(answer.length);
@@ -121,6 +137,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Clear previous messages
                 displayMessage('');
+                
+                startTime = Date.now();
+                timeSpan.style.display = 'block';
             })
             .catch((error) => {
               console.error("Error:", error);
@@ -144,6 +163,33 @@ document.addEventListener('DOMContentLoaded', function () {
       // Compare the guess with the original quote
       if (guess.trim().toLowerCase() === answer.toLowerCase()) {
         // Correct guess
+
+        clearInterval(timeInterval);
+        endTime = Date.now();
+        timeTaken = (endTime - startTime) / 1000;
+        score += 100;
+
+        // attempts penalty
+        score -= 40 - (attemptsLeft * 8);
+  
+        // time penalty
+        if (Math.floor(timeTaken) > 15) {
+          score -= Math.floor((Math.min(Math.floor(timeTaken), 100) / 2));
+        }
+  
+        // hint penalty
+        if (hintUsed) {
+          score -= 10;
+        }
+
+        if(score > getHighScore()) {
+          saveHighScore(score);
+        }
+
+        scoreSpan.textContent = `Score: ${score} | High: ${getHighScore()} `
+
+        console.log(score)
+
         displayMessage('OMG! You got it right!', true);
 
         var confettiSettings = { target: confettiElement, start_from_edge: true, clock: 50, max: 250 };

@@ -10,7 +10,13 @@
   <div class="wrapper">
     <canvas class="canvas" id="canvas"></canvas>
     <div class="container mx-auto px-4 py-8">
-      <h1 class="text-3xl font-bold mb-4">Complete the Quote!</h1>
+      <div class="mb-4 flex items-center justify-between">
+        <h1 class="text-3xl font-bold">Complete the Quote!</h1>
+        <div class="text-xs flex flex-col">
+          <span id="time" class="text-gray-500"></span>
+          <span id="score" class="text-gray-500"></span>
+        </div>
+      </div>
       <div id="quote-container" class="bg-gray-100 p-4 rounded shadow-md">
       </div>
       <form id="guess-form" class="mt-6">

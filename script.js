@@ -65,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
         confetti.clear();
         flagged = [];
         displayQuote('Loading...');
+        displayMessage('');
         document.getElementById('guess').value = "";
         hintUsed = false;
       fetch('https://api.quotable.io/random')
@@ -139,11 +140,11 @@ document.addEventListener('DOMContentLoaded', function () {
         // Correct guess
         displayMessage('OMG! You got it right!', true);
 
-        var confettiSettings = { target: confettiElement, start_from_edge: true, clock: 50 };
+        var confettiSettings = { target: confettiElement, start_from_edge: true, clock: 50, max: 250 };
         confetti = new ConfettiGenerator(confettiSettings);
         confetti.render();
 
-        setTimeout(fetchQuote, 3000); // Reset the game after 3 seconds
+        setTimeout(fetchQuote, 5000); // Reset the game after 3 seconds
       } else {
         // Incorrect guess
         //attemptsLeft--;

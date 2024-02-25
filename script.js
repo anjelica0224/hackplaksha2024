@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
       modal.classList.remove('flex');
       modal.classList.add('hidden');
     }
-    return
 
     let answer = "";
     let attemptsLeft = 5;

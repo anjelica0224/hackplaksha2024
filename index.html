@@ -5,11 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quotable</title>
   <link rel="stylesheet" href="assets/css/output.css">
+  <style>
+    body {
+      background-color: #add8e6; /* Light Teal */
+    }
+    @keyframes revealBlock {
+      100% {
+        color: #0f0f0f;
+      }
+    }
+    @keyframes revealingIn {
+      0% {
+        width: 0;
+      }
+      100% {
+        width: 100%;
+      }
+    }
+    @keyframes revealingOut {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+    .block-reveal {
+      --t: calc(var(--td) + var(--d));
+      color: transparent;
+      padding: 4px;
+      position: relative;
+      overflow: hidden;
+      animation: revealBlock 0s var(--t) forwards;
+    }
+    .block-reveal::after {
+      content: '';
+      width: 0%;
+      height: 100%;
+      padding-bottom: 4px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: var(--bc);
+      animation: revealingIn var(--td) var(--d) forwards, revealingOut var(--td) var(--t) forwards;
+    }
+  </style>
 </head>
 <body>
   <div class="wrapper">
     <canvas class="canvas" id="canvas"></canvas>
     <div class="container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold mb-4 block-effect" style="--td: 1.2s">
+        <div class="block-reveal" style="--bc: #add8e6; --d: .1s">Welcome</div>
+        <div class="block-reveal" style="--bc: #00008b; --d: .5s">To Quotable!</div>
+      </h1>
       <div class="mb-4 flex items-center justify-between">
         <h1 class="text-3xl font-bold">Complete the Quote!</h1>
         <div class="text-xs flex flex-col">
@@ -46,7 +95,7 @@
                   Ready to test your wordplay prowess? Dive into a world of enigmatic quotes with "<b>Quotable</b>"! In this captivating game, you'll encounter famous sayings with crucial words cleverly replaced by blanks. Your challenge? Decipher the hidden gems, one letter at a time.
                 </p>
                 <p class="text-base leading-relaxed text-gray-500">
-                  With each correct guess, you'll unveil the true meaning of the quote, unlocking a deeper understanding of its message. But beware, the clock is ticking and wrong answers will chip away at your attempts. Can you decipher the hidden words and claim victory before time runs out?
+                  With each correct guess, you'll unveil the true meaning of the quote, unlocking a deeper understanding of its message. But beware, the clock is ticking and wrong answers will chip away at your attempts. Can you decipher the hidden words and claim victory before time runs
                 </p>
             </div>
             <!-- Modal footer -->
@@ -55,7 +104,7 @@
             </div>
         </div>
     </div>
-</div>
+  </div>
   <script src="assets/js/confetti.js"></script>
   <script src="script.js"></script>
 </body>
